@@ -100,6 +100,118 @@
     logoDesktopQuery.addListener(applyLogoMode);
   }
 
+  /* Hero rings (image + statement): desktop shows one at a time. Each ring
+     appears once per cycle (random order), then hides before the next. After
+     all have shown, a new shuffled cycle starts. Timing matches the logo. */
+  const resultRings = Array.prototype.slice.call(
+    document.querySelectorAll(".result-ring")
+  );
+  let ringRevealTimer = null;
+  let ringCycleOrder = [];
+  let ringCycleIndex = 0;
+  let activeRing = null;
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  function shuffleList(list) {
+    const arr = list.slice();
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      const tmp = arr[i];
+      arr[i] = arr[j];
+      arr[j] = tmp;
+    }
+    return arr;
+  }
+
+  function clearRingRevealTimer() {
+    if (ringRevealTimer) {
+      window.clearTimeout(ringRevealTimer);
+      ringRevealTimer = null;
+    }
+  }
+
+  function hideAllRings() {
+    resultRings.forEach(function (el) {
+      el.classList.remove("is-visible");
+    });
+    activeRing = null;
+  }
+
+  function showAllRings() {
+    clearRingRevealTimer();
+    resultRings.forEach(function (el) {
+      el.classList.add("is-visible");
+    });
+    activeRing = null;
+  }
+
+  function nextRingInCycle() {
+    if (!ringCycleOrder.length || ringCycleIndex >= ringCycleOrder.length) {
+      ringCycleOrder = shuffleList(resultRings);
+      ringCycleIndex = 0;
+    }
+    const ring = ringCycleOrder[ringCycleIndex];
+    ringCycleIndex += 1;
+    return ring;
+  }
+
+  function startDesktopRingReveal() {
+    if (!resultRings.length) return;
+    clearRingRevealTimer();
+
+    if (prefersReducedMotion.matches) {
+      showAllRings();
+      return;
+    }
+
+    hideAllRings();
+    ringCycleOrder = shuffleList(resultRings);
+    ringCycleIndex = 0;
+
+    function showNextRing() {
+      /* Fade out the currently visible ring (only one at a time) */
+      if (activeRing) {
+        activeRing.classList.remove("is-visible");
+      }
+
+      /* After fade-out completes, fade in the next ring in this cycle */
+      ringRevealTimer = window.setTimeout(function () {
+        const ring = nextRingInCycle();
+        activeRing = ring;
+        ring.classList.add("is-visible");
+
+        /* Hold for the logo interval, then advance */
+        ringRevealTimer = window.setTimeout(showNextRing, logoIntervalMs);
+      }, activeRing ? logoFadeMs : 0);
+    }
+
+    /* First ring appears on the same cadence as the logo’s first swap */
+    ringRevealTimer = window.setTimeout(showNextRing, logoIntervalMs);
+  }
+
+  function applyRingRevealMode() {
+    if (logoDesktopQuery.matches) {
+      startDesktopRingReveal();
+    } else {
+      /* Mobile: always show rings (CSS does not hide them) */
+      showAllRings();
+    }
+  }
+
+  applyRingRevealMode();
+
+  if (typeof logoDesktopQuery.addEventListener === "function") {
+    logoDesktopQuery.addEventListener("change", applyRingRevealMode);
+  } else if (typeof logoDesktopQuery.addListener === "function") {
+    logoDesktopQuery.addListener(applyRingRevealMode);
+  }
+
+  if (typeof prefersReducedMotion.addEventListener === "function") {
+    prefersReducedMotion.addEventListener("change", applyRingRevealMode);
+  } else if (typeof prefersReducedMotion.addListener === "function") {
+    prefersReducedMotion.addListener(applyRingRevealMode);
+  }
+
   /* Header scroll state */
   function updateHeader() {
     if (!header) return;

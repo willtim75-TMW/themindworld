@@ -69,6 +69,8 @@
   </header>
 
   <main id="main">
+    <!-- Page 1: hero + value cards (one screen on desktop) -->
+    <div class="snap-page snap-page--home">
     <!-- Hero -->
     <section class="hero" aria-labelledby="hero-heading">
       <div class="hero-bg" aria-hidden="true">
@@ -99,14 +101,16 @@
 
           <div class="hero-content fade-up">
             <div class="hero-lead">
-              <p>
-                The Mind World gives today's entrepreneurial businesses the same enterprise-grade AI,
-                automation, and digital tools used by big companies — without the complexity or high costs.
-              </p>
-              <p>
-                Many local businesses struggle with outdated systems, scattered customer data, weak online
-                presence, and manual processes that waste time and revenue. We're here to fix that.
-              </p>
+              <div class="hero-lead-copy">
+                <p>
+                  The Mind World gives today's entrepreneurial businesses the same enterprise-grade AI,
+                  automation, and digital tools used by big companies — without the complexity or high costs.
+                </p>
+                <p>
+                  Many local businesses struggle with outdated systems, scattered customer data, weak online
+                  presence, and manual processes that waste time and revenue. We're here to fix that.
+                </p>
+              </div>
               <p class="hero-lead-label">Our tailored solutions include:</p>
               <ul class="hero-solutions">
                 <li><strong>AI Development</strong></li>
@@ -136,7 +140,7 @@
 
         <div class="hero-cta-block fade-up">
           <p class="hero-cta-line">
-            Ready to compete like the big players?&nbsp;&nbsp;&nbsp;Book a free consultation for your business.
+            <strong>Book a free Consultation for your business.</strong>
           </p>
           <div class="hero-actions">
             <a href="#contact" class="btn btn-primary">Book a <strong>FREE</strong> Consultation</a>
@@ -152,25 +156,26 @@
         <article class="value-item">
           <span class="value-icon" aria-hidden="true">◇</span>
           <h2>Enterprise Power</h2>
-          <p>Enterprise-level AI and tools, built for everyday entrepreneurial businesses — without the complexity or cost.</p>
+          <p>AI, Databases, Websites and Tools, built for everyday entrepreneurial businesses</p>
         </article>
         <article class="value-item">
           <span class="value-icon" aria-hidden="true">◎</span>
           <h2>Business Focused</h2>
           <p>
-            Designed for contractors, restaurants, retailers, independent businesses, and growing teams across the US.
+            Designed for contractors, restaurants, retailers, entrepreneurs, and small businesses
           </p>
         </article>
         <article class="value-item">
           <span class="value-icon" aria-hidden="true">✦</span>
           <h2>Practical Results</h2>
-          <p>Save time and money. Gain efficiency, more customers, higher profits, and fewer operational headaches.</p>
+          <p>Gain customers, save time, and generate more profits by eliminating operational headaches</p>
         </article>
       </div>
     </section>
+    </div>
 
     <!-- About -->
-    <section class="section about has-circuit-bg" id="about" aria-labelledby="about-heading">
+    <section class="section about has-circuit-bg snap-page" id="about" aria-labelledby="about-heading">
       <div class="section-bg" aria-hidden="true">
         <img src="assets/bluecircuit.jpg" alt="" class="section-bg-img" loading="lazy">
         <div class="section-overlay"></div>
@@ -200,8 +205,8 @@
 
           <h3 class="about-subhead">Our Mission</h3>
           <p>
-            Deliver big-business AI and digital solutions to local entrepreneurs—providing powerful tools
-            for efficient growth without the big-business costs or complexity.
+            Deliver big-business AI and digital solutions to local entrepreneurs; giving access to
+            innovative tools and applications to grow their business.
           </p>
 
           <h3 class="about-subhead">What Sets Us Apart</h3>
@@ -220,9 +225,9 @@
             </li>
           </ul>
 
-          <p>Every solution is custom built to deliver visible impact to your business!!</p>
+          <p>Every solution is custom built for YOUR business!!</p>
           <p class="about-cta-line">
-            Ready to upgrade your business?
+            The Mind World is ready to listen
           </p>
           <a href="#contact" class="btn btn-primary">Contact Us Today</a>
         </div>
@@ -230,7 +235,7 @@
     </section>
 
     <!-- Services -->
-    <section class="section services has-circuit-bg" id="services" aria-labelledby="services-heading">
+    <section class="section services has-circuit-bg snap-page" id="services" aria-labelledby="services-heading">
       <div class="section-bg" aria-hidden="true">
         <img src="assets/bluecircuit.jpg" alt="" class="section-bg-img" loading="lazy">
         <div class="section-overlay"></div>
@@ -378,7 +383,7 @@
     </section>
 
     <!-- Work / Case Studies (add completed projects here over time) -->
-    <section class="section work has-circuit-bg" id="work" aria-labelledby="work-heading">
+    <section class="section work has-circuit-bg snap-page" id="work" aria-labelledby="work-heading">
       <div class="section-bg" aria-hidden="true">
         <img src="assets/bluecircuit.jpg" alt="" class="section-bg-img" loading="lazy">
         <div class="section-overlay"></div>
@@ -457,8 +462,9 @@
       </div>
     </section>
 
-    <!-- Contact -->
-    <section class="section contact has-circuit-bg" id="contact" aria-labelledby="contact-heading">
+    <!-- Contact + footer (one screen on desktop) -->
+    <div class="snap-page snap-page--contact" id="contact">
+    <section class="section contact has-circuit-bg" aria-labelledby="contact-heading">
       <div class="section-bg" aria-hidden="true">
         <img src="assets/bluecircuit.jpg" alt="" class="section-bg-img" loading="lazy">
         <div class="section-overlay"></div>
@@ -501,14 +507,13 @@
           </div>
           <div class="form-row">
             <label for="message">How can we help?</label>
-            <textarea id="message" name="message" rows="5" required placeholder="A few sentences about what you need…"></textarea>
+            <textarea id="message" name="message" rows="4" required placeholder="A few sentences about what you need…"></textarea>
           </div>
           <button type="submit" class="btn btn-primary btn-block" id="contact-submit">Send message</button>
           <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
         </form>
       </div>
     </section>
-  </main>
 
   <footer class="site-footer">
     <div class="container footer-inner">
@@ -525,6 +530,8 @@
       <p class="footer-copy">&copy; <span id="year"></span> The Mind World. All rights reserved.</p>
     </div>
   </footer>
+    </div>
+  </main>
 
   <script src="js/main.js" defer></script>
 </body>
