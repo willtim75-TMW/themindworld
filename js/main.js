@@ -102,13 +102,25 @@
 
   /* Result rings (image + statement): desktop uses fixed .site-rings on every
      page (one at a time, shuffled cycles). Mobile uses hero-flow rings (all
-     visible). Timing matches the logo rotation. */
+     visible). Timing matches the logo rotation.
+     Site-wide energy: fixed circuit atmosphere always runs; bolts fire from
+     page center and hit each ring as it appears on any section. */
   let resultRings = [];
   let ringRevealTimer = null;
+  let energyTimers = [];
   let ringCycleOrder = [];
   let ringCycleIndex = 0;
   let activeRing = null;
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const energyField = document.querySelector("[data-energy-field]");
+  const energyCore = document.querySelector("[data-energy-core]");
+  const energyBolt = document.querySelector("[data-energy-bolt]");
+  const energyImpact = document.querySelector("[data-energy-impact]");
+  /* Bolt travel time — ring fades in on impact so the hit feels synchronized */
+  const energyBoltMs = 550;
+  const energyImpactAtMs = 300;
+  const energyEnergizeMs = 900;
+  const energySurgeMs = 700;
 
   function getRingElements() {
     /* Desktop: site-wide fixed rings. Mobile: hero-embedded rings. */
@@ -136,15 +148,117 @@
     }
   }
 
+  function clearEnergyTimers() {
+    energyTimers.forEach(function (id) {
+      window.clearTimeout(id);
+    });
+    energyTimers = [];
+  }
+
+  function resetEnergyVisuals() {
+    clearEnergyTimers();
+    document.body.classList.remove("is-energy-surge");
+    if (energyCore) energyCore.classList.remove("is-pulsing");
+    if (energyBolt) energyBolt.classList.remove("is-firing");
+    if (energyImpact) energyImpact.classList.remove("is-hit");
+    document.querySelectorAll(".result-ring.is-energized").forEach(function (el) {
+      el.classList.remove("is-energized");
+    });
+  }
+
+  function scheduleEnergy(fn, ms) {
+    const id = window.setTimeout(function () {
+      energyTimers = energyTimers.filter(function (t) {
+        return t !== id;
+      });
+      fn();
+    }, ms);
+    energyTimers.push(id);
+    return id;
+  }
+
+  /**
+   * Fire a directed energy bolt from viewport center to a result ring.
+   * Reveals the ring at impact and pulses background energy.
+   */
+  function fireEnergyToRing(ring, onComplete) {
+    if (
+      !ring ||
+      !energyField ||
+      !energyBolt ||
+      prefersReducedMotion.matches ||
+      !logoDesktopQuery.matches
+    ) {
+      if (ring) {
+        ring.classList.add("is-visible");
+        activeRing = ring;
+      }
+      if (typeof onComplete === "function") onComplete();
+      return;
+    }
+
+    const rect = ring.getBoundingClientRect();
+    const originX = window.innerWidth * 0.5;
+    const originY = window.innerHeight * 0.5;
+    const targetX = rect.left + rect.width / 2;
+    const targetY = rect.top + rect.height / 2;
+    const dx = targetX - originX;
+    const dy = targetY - originY;
+    const length = Math.max(40, Math.hypot(dx, dy));
+    const angleDeg = (Math.atan2(dy, dx) * 180) / Math.PI;
+
+    /* Restart bolt animation cleanly */
+    energyBolt.classList.remove("is-firing");
+    if (energyCore) energyCore.classList.remove("is-pulsing");
+    if (energyImpact) energyImpact.classList.remove("is-hit");
+    void energyBolt.offsetWidth;
+
+    energyBolt.style.setProperty("--bolt-x", originX + "px");
+    energyBolt.style.setProperty("--bolt-y", originY + "px");
+    energyBolt.style.setProperty("--bolt-length", length + "px");
+    energyBolt.style.setProperty("--bolt-angle", angleDeg + "deg");
+
+    if (energyImpact) {
+      energyImpact.style.setProperty("--impact-x", targetX + "px");
+      energyImpact.style.setProperty("--impact-y", targetY + "px");
+    }
+
+    document.body.classList.add("is-energy-surge");
+    if (energyCore) energyCore.classList.add("is-pulsing");
+    energyBolt.classList.add("is-firing");
+
+    /* Bolt reaches the ring → reveal statement + impact flash.
+       onComplete runs at impact so hold timing stays aligned with logo cadence. */
+    scheduleEnergy(function () {
+      activeRing = ring;
+      ring.classList.add("is-visible");
+      ring.classList.add("is-energized");
+      if (energyImpact) energyImpact.classList.add("is-hit");
+      if (typeof onComplete === "function") onComplete();
+    }, energyImpactAtMs);
+
+    scheduleEnergy(function () {
+      document.body.classList.remove("is-energy-surge");
+    }, energySurgeMs);
+
+    scheduleEnergy(function () {
+      ring.classList.remove("is-energized");
+      energyBolt.classList.remove("is-firing");
+      if (energyCore) energyCore.classList.remove("is-pulsing");
+      if (energyImpact) energyImpact.classList.remove("is-hit");
+    }, Math.max(energyBoltMs, energyEnergizeMs));
+  }
+
   function hideAllRings() {
     resultRings.forEach(function (el) {
-      el.classList.remove("is-visible");
+      el.classList.remove("is-visible", "is-energized");
     });
     activeRing = null;
   }
 
   function showAllRings() {
     clearRingRevealTimer();
+    resetEnergyVisuals();
     resultRings.forEach(function (el) {
       el.classList.add("is-visible");
     });
@@ -165,6 +279,7 @@
     resultRings = getRingElements();
     if (!resultRings.length) return;
     clearRingRevealTimer();
+    resetEnergyVisuals();
 
     if (prefersReducedMotion.matches) {
       showAllRings();
@@ -178,17 +293,16 @@
     function showNextRing() {
       /* Fade out the currently visible ring (only one at a time) */
       if (activeRing) {
-        activeRing.classList.remove("is-visible");
+        activeRing.classList.remove("is-visible", "is-energized");
       }
 
-      /* After fade-out completes, fade in the next ring in this cycle */
+      /* After fade-out completes, fire energy then reveal the next ring */
       ringRevealTimer = window.setTimeout(function () {
         const ring = nextRingInCycle();
-        activeRing = ring;
-        ring.classList.add("is-visible");
-
-        /* Hold for the logo interval, then advance */
-        ringRevealTimer = window.setTimeout(showNextRing, logoIntervalMs);
+        fireEnergyToRing(ring, function () {
+          /* Hold for the logo interval, then advance */
+          ringRevealTimer = window.setTimeout(showNextRing, logoIntervalMs);
+        });
       }, activeRing ? logoFadeMs : 0);
     }
 
@@ -198,10 +312,11 @@
 
   function applyRingRevealMode() {
     clearRingRevealTimer();
+    resetEnergyVisuals();
     activeRing = null;
     /* Clear visibility on both sets when switching modes */
     document.querySelectorAll(".result-ring").forEach(function (el) {
-      el.classList.remove("is-visible");
+      el.classList.remove("is-visible", "is-energized");
     });
 
     resultRings = getRingElements();

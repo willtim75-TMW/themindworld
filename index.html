@@ -68,6 +68,33 @@
     </div>
   </header>
 
+  <!-- Site-wide ambient energy: fixed circuit atmosphere behind all pages -->
+  <div class="site-energy" aria-hidden="true" data-site-energy>
+    <img
+      class="site-energy-img"
+      src="assets/bluecircuit.jpg"
+      alt=""
+      width="1920"
+      height="1080"
+      loading="eager"
+      decoding="async"
+    >
+    <div class="site-energy-veil"></div>
+    <div class="site-energy-flow" data-site-energy-flow></div>
+  </div>
+
+  <!-- Directed bolts + floating nodes (synced to result rings; site-wide) -->
+  <div class="energy-field" aria-hidden="true" data-energy-field>
+    <div class="energy-core" data-energy-core></div>
+    <div class="energy-bolt" data-energy-bolt></div>
+    <div class="energy-impact" data-energy-impact></div>
+    <div class="energy-nodes" data-energy-nodes>
+      <span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span>
+    </div>
+  </div>
+
   <!-- Desktop: result rings + statements fixed on all pages (animated via JS) -->
   <div class="site-rings" aria-hidden="true">
     <div class="site-rings-col site-rings-left">
@@ -103,6 +130,7 @@
     <section class="hero" aria-labelledby="hero-heading">
       <div class="hero-bg" aria-hidden="true">
         <img src="assets/themindworld_main.jpg" alt="" class="hero-bg-img">
+        <div class="bg-energy" aria-hidden="true"></div>
         <div class="hero-overlay"></div>
       </div>
 
@@ -207,6 +235,7 @@
     <section class="section about has-circuit-bg snap-page" id="about" aria-labelledby="about-heading">
       <div class="section-bg" aria-hidden="true">
         <img src="assets/bluecircuit.jpg" alt="" class="section-bg-img" loading="lazy">
+        <div class="bg-energy" aria-hidden="true"></div>
         <div class="section-overlay"></div>
       </div>
       <div class="container about-grid">
@@ -267,6 +296,7 @@
     <section class="section services has-circuit-bg snap-page" id="services" aria-labelledby="services-heading">
       <div class="section-bg" aria-hidden="true">
         <img src="assets/bluecircuit.jpg" alt="" class="section-bg-img" loading="lazy">
+        <div class="bg-energy" aria-hidden="true"></div>
         <div class="section-overlay"></div>
       </div>
       <div class="container">
@@ -415,6 +445,7 @@
     <section class="section work has-circuit-bg snap-page" id="work" aria-labelledby="work-heading">
       <div class="section-bg" aria-hidden="true">
         <img src="assets/bluecircuit.jpg" alt="" class="section-bg-img" loading="lazy">
+        <div class="bg-energy" aria-hidden="true"></div>
         <div class="section-overlay"></div>
       </div>
       <div class="container">
@@ -496,6 +527,7 @@
     <section class="section contact has-circuit-bg" aria-labelledby="contact-heading">
       <div class="section-bg" aria-hidden="true">
         <img src="assets/bluecircuit.jpg" alt="" class="section-bg-img" loading="lazy">
+        <div class="bg-energy" aria-hidden="true"></div>
         <div class="section-overlay"></div>
       </div>
       <div class="container contact-grid">
