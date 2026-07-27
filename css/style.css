@@ -301,6 +301,7 @@ ul {
 .hero-layout {
   position: relative;
   z-index: 1;
+  isolation: isolate;
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -325,13 +326,9 @@ ul {
   margin-bottom: 0;
 }
 
-/* Rings only beside body copy — not the tagline */
+/* Body copy column (desktop rings are fixed via .site-rings) */
 .hero-body {
-  display: grid;
-  grid-template-columns: minmax(7.5rem, 0.75fr) minmax(0, 64rem) minmax(7.5rem, 0.75fr);
-  column-gap: clamp(0.35rem, 1.5vw, 1.25rem);
-  align-items: center;
-  justify-content: center;
+  display: block;
   width: 100%;
   overflow: visible;
 }
@@ -341,7 +338,7 @@ ul {
   z-index: 1;
   width: 100%;
   max-width: 64rem;
-  justify-self: center;
+  margin-inline: auto;
 }
 
 .hero-cta-block {
@@ -356,6 +353,14 @@ ul {
   /* CTA line sits in the solid fade zone below the bg image */
 }
 
+/* Mobile rings row (under CTA). Hidden on desktop — .site-rings is used instead. */
+.hero-rings-row {
+  display: none;
+  width: 100%;
+  pointer-events: none;
+  user-select: none;
+}
+
 .hero-rings {
   display: flex;
   flex-direction: column;
@@ -364,20 +369,17 @@ ul {
   gap: 1.15rem;
   pointer-events: none;
   user-select: none;
-  /* Side columns stretch toward page edges */
   width: 100%;
   max-width: none;
   overflow: visible;
 }
 
 .hero-rings-left {
-  justify-self: start;
   align-items: flex-start;
   padding-left: 0.25rem;
 }
 
 .hero-rings-right {
-  justify-self: end;
   align-items: flex-end;
   gap: 1rem;
   padding-right: 0.25rem;
@@ -474,14 +476,10 @@ ul {
     gap: 0.75rem;
   }
 
-  /* Hero keeps copy centered; side columns are used only on mobile */
+  /* Desktop uses fixed .site-rings; hero-flow rings are mobile-only */
+  .hero-rings-row,
   .hero-rings {
-    display: none;
-  }
-
-  .hero-body {
-    grid-template-columns: minmax(0, 64rem);
-    justify-content: center;
+    display: none !important;
   }
 
   /* Keep About / Offerings / Work / Contact clear of side rings */
@@ -558,6 +556,8 @@ ul {
   z-index: 0;
   overflow: hidden;
   pointer-events: none;
+  /* Contain mix-blend energy so it never paints over hero copy/imagery */
+  isolation: isolate;
 }
 
 .hero-bg-img {
@@ -1339,6 +1339,9 @@ ul {
 }
 
 .value-item {
+  position: relative;
+  z-index: 1;
+  isolation: isolate;
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -1427,6 +1430,7 @@ ul {
 .section.has-circuit-bg > .container {
   position: relative;
   z-index: 1;
+  isolation: isolate;
 }
 
 .section-bg {
@@ -1435,6 +1439,8 @@ ul {
   z-index: 0;
   overflow: hidden;
   pointer-events: none;
+  /* Contain mix-blend energy so it never paints over content */
+  isolation: isolate;
 }
 
 .section-bg-img {
@@ -1453,7 +1459,9 @@ ul {
    - Directed bolts to result rings (desktop)
    ========================================================================== */
 
-/* Fixed full-viewport energy (all pages, all breakpoints) */
+/* Fixed full-viewport energy (all pages, all breakpoints)
+   Stack: site-energy (0) → energy-field (1) → main content (2) → rings (5) → header (100)
+   Effects always paint behind text, cards, and imagery. */
 .site-energy {
   position: fixed;
   inset: 0;
@@ -1558,10 +1566,11 @@ ul {
     energy-hotspots-drift 11s ease-in-out infinite alternate;
 }
 
-/* Keep page content above the fixed ambient energy layer */
+/* Page content above all ambient energy (circuit, bolts, nodes) */
 main {
   position: relative;
-  z-index: 1;
+  z-index: 2;
+  isolation: isolate;
 }
 
 /* Stronger surge when a bolt fires toward a result ring (whole site) */
@@ -1624,11 +1633,11 @@ body.is-energy-surge .bg-energy::after {
     radial-gradient(ellipse 80% 55% at 50% 28%, transparent 0%, rgba(2, 16, 33, 0.3) 100%);
 }
 
-/* Floating nodes + directed bolts (above content edges, below rings) */
+/* Floating nodes + directed bolts — above site-energy circuit, below all content */
 .energy-field {
   position: fixed;
   inset: 0;
-  z-index: 4; /* above content backgrounds, below .site-rings (5) */
+  z-index: 1;
   pointer-events: none;
   overflow: hidden;
   user-select: none;
@@ -1900,6 +1909,8 @@ body.is-energy-surge .energy-nodes span {
 
 .brain-map {
   position: relative;
+  z-index: 1;
+  isolation: isolate;
   width: min(100%, 42rem);
   margin-inline: auto;
   aspect-ratio: 1;
@@ -2026,6 +2037,8 @@ body.is-energy-surge .energy-nodes span {
 
 .service-panel {
   position: relative;
+  z-index: 1;
+  isolation: isolate;
   min-height: 14rem;
   padding: 1.75rem 1.6rem;
   background: #000;
@@ -2063,6 +2076,9 @@ body.is-energy-surge .energy-nodes span {
 }
 
 .service-list-item {
+  position: relative;
+  z-index: 1;
+  isolation: isolate;
   background: #000;
   border: 1px solid var(--color-card-border);
   border-radius: var(--radius-sm);
@@ -2124,6 +2140,8 @@ body.is-energy-surge .energy-nodes span {
 
 .about-frame {
   position: relative;
+  z-index: 1;
+  isolation: isolate;
   border-radius: 50%;
   overflow: hidden;
   aspect-ratio: 1;
@@ -2140,6 +2158,9 @@ body.is-energy-surge .energy-nodes span {
 }
 
 .about-copy {
+  position: relative;
+  z-index: 1;
+  isolation: isolate;
   min-width: 0;
   max-width: none;
   align-self: center;
@@ -2243,6 +2264,9 @@ body.is-energy-surge .energy-nodes span {
 }
 
 .case-card {
+  position: relative;
+  z-index: 1;
+  isolation: isolate;
   display: flex;
   flex-direction: column;
   background: rgba(0, 0, 0, 0.55);
@@ -2496,6 +2520,9 @@ body.is-energy-surge .energy-nodes span {
 }
 
 .contact-form {
+  position: relative;
+  z-index: 1;
+  isolation: isolate;
   padding: 2rem;
   background: var(--color-card);
   border: 1px solid var(--color-card-border);
@@ -2817,70 +2844,100 @@ body.is-energy-surge .energy-nodes span {
 
   .hero {
     min-height: auto;
-    padding: calc(var(--header-h) + 1.25rem) 0 1.25rem;
+    /* Tight under fixed header — avoid a large empty bg band above copy */
+    padding: calc(var(--header-h) + 0.65rem) 0 1.25rem;
   }
 
   .hero-bg {
+    position: absolute;
     inset: 0;
     height: auto;
+    /* Clip bg to hero; never participate in document flow */
+    overflow: hidden;
+  }
+
+  .hero-bg-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    object-fit: cover;
+    object-position: center 18%;
   }
 
   .hero::after {
-    min-height: 0.75rem;
-    flex: 0 0 auto;
+    display: none;
   }
 
   .hero-layout {
     display: flex;
-    flex-flow: row wrap;
-    justify-content: center;
-    align-items: center;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 0.85rem;
     width: min(100% - 1.5rem, var(--container));
     text-align: center;
   }
 
   .hero-intro {
-    flex: 0 0 100%;
-    order: 1;
-    margin-inline: auto;
+    width: 100%;
+    margin-inline: 0;
     margin-bottom: 0;
     text-align: center;
     max-width: none;
   }
 
-  /* Flatten body so rings can sit after CTA (siblings in hero-layout) */
   .hero-body {
-    display: contents;
+    display: block;
+    width: 100%;
   }
 
   .hero-content {
-    flex: 0 0 100%;
-    order: 2;
+    width: 100%;
     max-width: none;
     text-align: center;
   }
 
   .hero-cta-block {
-    flex: 0 0 100%;
-    order: 3;
-    text-align: center;
+    width: 100%;
     max-width: none;
+    text-align: center;
     margin-top: 0;
   }
 
-  /* Stack: intro → copy → CTA buttons → rings */
-  .hero-rings-left,
-  .hero-rings-right {
-    order: 4;
-    flex: 0 0 auto;
+  /*
+   * Rings under Explore Offerings — DOM order after CTA (no display:contents /
+   * flex order; those break on some mobile browsers and left rings mid-page).
+   */
+  .hero-rings-row {
+    display: flex;
     flex-direction: row;
+    flex-wrap: nowrap;
     align-items: center;
     justify-content: center;
-    gap: 0.1rem;
-    padding: 0.65rem 0 0;
+    gap: 0.15rem;
+    width: 100%;
+    margin: 0.15rem 0 0;
+    padding: 0;
+  }
+
+  .hero-rings-row .hero-rings,
+  .hero-rings-left,
+  .hero-rings-right {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.15rem;
+    width: auto;
+    padding: 0;
+    margin: 0;
     animation: none;
   }
 
+  .hero-rings-row .result-ring,
   .result-ring,
   .hero-rings-left .result-ring:nth-child(n),
   .hero-rings-right .result-ring:nth-child(n) {
@@ -2890,8 +2947,10 @@ body.is-energy-surge .energy-nodes span {
     --x: 0;
     --y: 0;
     --rot: 0deg;
+    opacity: 1;
   }
 
+  .hero-rings-row .result-ring-text,
   .result-ring-text {
     font-size: clamp(0.48rem, 2.1vw, 0.58rem);
     max-width: 3.5rem;
@@ -2901,40 +2960,39 @@ body.is-energy-surge .energy-nodes span {
     line-height: 1.1;
   }
 
-  .hero-rings {
-    width: auto;
-    gap: 0.1rem;
-  }
-
   .eyebrow-hero {
     white-space: normal;
     font-size: 0.72rem;
     font-weight: var(--fw-bold);
     letter-spacing: 0.06em;
     line-height: 1.45;
-    margin-bottom: 0.65rem;
+    margin-bottom: 0.5rem;
+    max-width: none;
+    width: 100%;
   }
 
   .hero-title {
     font-size: clamp(1.7rem, 7.5vw, 2.25rem);
+    width: 100%;
   }
 
   .hero-lead {
-    margin-inline: auto;
+    margin-inline: 0;
     margin-bottom: 0;
     font-size: 0.975rem;
     line-height: 1.55;
-    max-width: none;
+    max-width: none !important;
     width: 100%;
   }
 
-  /* Match tagline / intro width — drop brain-width constraint on mobile */
+  /* Full width of tagline / intro — drop brain-width constraint on mobile */
   .hero-lead-copy {
-    max-width: none;
-    width: 100%;
-    margin-inline: 0;
+    max-width: none !important;
+    width: 100% !important;
+    margin-inline: 0 !important;
     font-size: calc(0.85rem + 3pt);
     line-height: 1.45;
+    text-align: center;
   }
 
   .hero-lead p {
@@ -2943,10 +3001,14 @@ body.is-energy-surge .energy-nodes span {
 
   .hero-lead-copy p {
     margin-bottom: 0.65rem;
+    max-width: none;
+    width: 100%;
   }
 
   .hero-lead-label {
     font-size: 0.95rem;
+    margin-top: 0.95rem !important;
+    width: 100%;
   }
 
   .hero-solutions {
@@ -2954,15 +3016,12 @@ body.is-energy-surge .energy-nodes span {
     font-size: 0.95rem;
     margin-bottom: 0;
     width: 100%;
-  }
-
-  .hero-lead-label {
-    margin-top: 0.95rem !important;
+    max-width: none;
   }
 
   .hero-cta-line {
     margin-top: 0;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
     font-size: 1rem;
     padding-inline: 0.25rem;
   }
@@ -3004,12 +3063,14 @@ body.is-energy-surge .energy-nodes span {
     padding: 0.95rem 1.25rem;
   }
 
+  .hero-rings-row .result-ring,
   .result-ring,
   .hero-rings-left .result-ring:nth-child(n),
   .hero-rings-right .result-ring:nth-child(n) {
     width: min(18vw, 4rem);
   }
 
+  .hero-rings-row .result-ring-text,
   .result-ring-text {
     font-size: 0.45rem;
     max-width: 3.1rem;
