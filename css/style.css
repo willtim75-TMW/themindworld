@@ -426,8 +426,72 @@ ul {
   transform: rotate(calc(-1 * var(--rot, 0deg)));
 }
 
+/* Desktop: site-wide fixed rings on every page; hero rings only for mobile */
+.site-rings {
+  display: none;
+}
+
 /* Desktop: ring image + statement start hidden, revealed together one-by-one via JS */
 @media (min-width: 721px) {
+  :root {
+    /* Side space so content does not sit under fixed rings */
+    --ring-gutter: clamp(5.25rem, 7vw, 7rem);
+  }
+
+  .site-rings {
+    display: block;
+    position: fixed;
+    /* Below sticky header, above section backgrounds */
+    top: var(--header-h, 4.5rem);
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 5;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .site-rings-col {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.85rem;
+  }
+
+  .site-rings-left {
+    left: clamp(0.35rem, 1.5vw, 1.25rem);
+    align-items: flex-start;
+  }
+
+  .site-rings-right {
+    right: clamp(0.35rem, 1.5vw, 1.25rem);
+    align-items: flex-end;
+    gap: 0.75rem;
+  }
+
+  /* Hero keeps copy centered; side columns are used only on mobile */
+  .hero-rings {
+    display: none;
+  }
+
+  .hero-body {
+    grid-template-columns: minmax(0, 64rem);
+    justify-content: center;
+  }
+
+  /* Keep About / Offerings / Work / Contact clear of side rings */
+  main .container:not(.hero-layout) {
+    width: min(100% - (2 * var(--ring-gutter)), var(--container));
+  }
+
+  .snap-page--contact .contact-grid {
+    width: min(100% - (2 * var(--ring-gutter)), var(--container));
+  }
+
   .result-ring {
     opacity: 0;
   }
@@ -435,34 +499,49 @@ ul {
   .result-ring.is-visible {
     opacity: 1;
   }
+
+  /* Slightly smaller fixed rings so they sit in page margins */
+  .site-rings .result-ring {
+    width: clamp(4.25rem, 5.5vw, 5.75rem);
+  }
+
+  .site-rings .result-ring-text {
+    font-size: clamp(0.48rem, 0.7vw, 0.62rem);
+    max-width: 4.5rem;
+  }
 }
 
 /* Zigzag: outer rings push further toward page edges */
-.hero-rings-left .result-ring:nth-child(1) {
+.hero-rings-left .result-ring:nth-child(1),
+.site-rings-left .result-ring:nth-child(1) {
   --x: -1.25rem;
   --y: 0;
   --rot: -8deg;
 }
 
-.hero-rings-left .result-ring:nth-child(2) {
+.hero-rings-left .result-ring:nth-child(2),
+.site-rings-left .result-ring:nth-child(2) {
   --x: 1.75rem;
   --y: 0.75rem;
   --rot: 7deg;
 }
 
-.hero-rings-right .result-ring:nth-child(1) {
+.hero-rings-right .result-ring:nth-child(1),
+.site-rings-right .result-ring:nth-child(1) {
   --x: 1.35rem;
   --y: -0.5rem;
   --rot: 8deg;
 }
 
-.hero-rings-right .result-ring:nth-child(2) {
+.hero-rings-right .result-ring:nth-child(2),
+.site-rings-right .result-ring:nth-child(2) {
   --x: -1.85rem;
   --y: 0.35rem;
   --rot: -7deg;
 }
 
-.hero-rings-right .result-ring:nth-child(3) {
+.hero-rings-right .result-ring:nth-child(3),
+.site-rings-right .result-ring:nth-child(3) {
   --x: 1.15rem;
   --y: 0.9rem;
   --rot: 5deg;
@@ -701,21 +780,21 @@ ul {
       0 0 36px rgba(143, 210, 226, 0.28);
   }
 
-  .hero-rings {
+  .site-rings-col {
     gap: 0.35rem;
   }
 
-  .hero-rings-right {
+  .site-rings-right {
     gap: 0.3rem;
   }
 
-  .result-ring {
-    width: clamp(4.5rem, 6vw, 5.75rem);
+  .site-rings .result-ring {
+    width: clamp(4.25rem, 5.25vw, 5.5rem);
   }
 
-  .result-ring-text {
-    font-size: clamp(0.5rem, 0.75vw, 0.62rem);
-    max-width: 4.5rem;
+  .site-rings .result-ring-text {
+    font-size: clamp(0.48rem, 0.68vw, 0.6rem);
+    max-width: 4.35rem;
   }
 
   .value-grid {
@@ -752,7 +831,7 @@ ul {
   .section.snap-page > .container {
     flex: 0 1 auto;
     min-height: 0;
-    width: min(100% - 2rem, var(--container));
+    width: min(100% - (2 * var(--ring-gutter, 5.25rem)), var(--container));
     margin-inline: auto;
   }
 
@@ -865,7 +944,7 @@ ul {
   .snap-page--contact .contact-grid {
     gap: 1.5rem;
     align-items: center;
-    width: min(100% - 2rem, var(--container));
+    width: min(100% - (2 * var(--ring-gutter, 5.25rem)), var(--container));
     margin-inline: auto;
   }
 
@@ -956,16 +1035,16 @@ ul {
     min-height: 2.05rem;
   }
 
-  .result-ring {
+  .site-rings .result-ring {
     width: clamp(3.9rem, 5.2vw, 5rem);
   }
 
-  .result-ring-text {
+  .site-rings .result-ring-text {
     font-size: clamp(0.46rem, 0.65vw, 0.56rem);
     max-width: 3.9rem;
   }
 
-  .hero-rings {
+  .site-rings-col {
     gap: 0.25rem;
   }
 
@@ -2209,7 +2288,9 @@ ul {
   .fade-up,
   .reveal,
   .hero-rings-left,
-  .hero-rings-right {
+  .hero-rings-right,
+  .site-rings-left,
+  .site-rings-right {
     opacity: 1;
     transform: none;
     animation: none !important;
