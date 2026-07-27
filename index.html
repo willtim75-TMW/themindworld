@@ -68,6 +68,34 @@
     </div>
   </header>
 
+  <!-- Desktop: result rings + statements fixed on all pages (animated via JS) -->
+  <div class="site-rings" aria-hidden="true">
+    <div class="site-rings-col site-rings-left">
+      <div class="result-ring" style="--x: -1.25rem; --y: 0; --rot: -8deg">
+        <img src="assets/resultsring.jpg" alt="" width="160" height="157" loading="eager">
+        <span class="result-ring-text">Faster<br>Operations</span>
+      </div>
+      <div class="result-ring" style="--x: 1.75rem; --y: 0.75rem; --rot: 7deg">
+        <img src="assets/resultsring.jpg" alt="" width="160" height="157" loading="eager">
+        <span class="result-ring-text">Better<br>Branding</span>
+      </div>
+    </div>
+    <div class="site-rings-col site-rings-right">
+      <div class="result-ring" style="--x: 1.35rem; --y: -0.5rem; --rot: 8deg">
+        <img src="assets/resultsring.jpg" alt="" width="160" height="157" loading="eager">
+        <span class="result-ring-text">More<br>Customers</span>
+      </div>
+      <div class="result-ring" style="--x: -1.85rem; --y: 0.35rem; --rot: -7deg">
+        <img src="assets/resultsring.jpg" alt="" width="160" height="157" loading="eager">
+        <span class="result-ring-text">Bigger<br>Profits</span>
+      </div>
+      <div class="result-ring" style="--x: 1.15rem; --y: 0.9rem; --rot: 5deg">
+        <img src="assets/resultsring.jpg" alt="" width="160" height="157" loading="eager">
+        <span class="result-ring-text">Less<br>Headaches</span>
+      </div>
+    </div>
+  </div>
+
   <main id="main">
     <!-- Page 1: hero + value cards (one screen on desktop) -->
     <div class="snap-page snap-page--home">
@@ -88,13 +116,14 @@
         </div>
 
         <div class="hero-body">
+          <!-- Mobile only: rings live in the hero flow. Desktop uses .site-rings. -->
           <div class="hero-rings hero-rings-left" aria-hidden="true">
             <div class="result-ring" style="--x: -1.25rem; --y: 0; --rot: -8deg">
-              <img src="assets/resultsring.jpg" alt="" width="160" height="157" loading="eager">
+              <img src="assets/resultsring.jpg" alt="" width="160" height="157" loading="lazy">
               <span class="result-ring-text">Faster<br>Operations</span>
             </div>
             <div class="result-ring" style="--x: 1.75rem; --y: 0.75rem; --rot: 7deg">
-              <img src="assets/resultsring.jpg" alt="" width="160" height="157" loading="eager">
+              <img src="assets/resultsring.jpg" alt="" width="160" height="157" loading="lazy">
               <span class="result-ring-text">Better<br>Branding</span>
             </div>
           </div>
@@ -124,15 +153,15 @@
 
           <div class="hero-rings hero-rings-right" aria-hidden="true">
             <div class="result-ring" style="--x: 1.35rem; --y: -0.5rem; --rot: 8deg">
-              <img src="assets/resultsring.jpg" alt="" width="160" height="157" loading="eager">
+              <img src="assets/resultsring.jpg" alt="" width="160" height="157" loading="lazy">
               <span class="result-ring-text">More<br>Customers</span>
             </div>
             <div class="result-ring" style="--x: -1.85rem; --y: 0.35rem; --rot: -7deg">
-              <img src="assets/resultsring.jpg" alt="" width="160" height="157" loading="eager">
+              <img src="assets/resultsring.jpg" alt="" width="160" height="157" loading="lazy">
               <span class="result-ring-text">Bigger<br>Profits</span>
             </div>
             <div class="result-ring" style="--x: 1.15rem; --y: 0.9rem; --rot: 5deg">
-              <img src="assets/resultsring.jpg" alt="" width="160" height="157" loading="eager">
+              <img src="assets/resultsring.jpg" alt="" width="160" height="157" loading="lazy">
               <span class="result-ring-text">Less<br>Headaches</span>
             </div>
           </div>
@@ -415,7 +444,7 @@
             <div class="case-card-media case-card-media--logos">
               <img src="assets/work/QB.png" alt="QB" loading="lazy" width="160" height="80">
               <span class="case-card-logo-sep" aria-hidden="true">/</span>
-              <img src="assets/work/disfruita.png" alt="Disfruta" loading="lazy" width="160" height="80">
+              <img src="assets/work/logo-header.png" alt="Disfruta" loading="lazy" width="160" height="98">
             </div>
             <div class="case-card-body">
               <p class="case-card-meta">Coming soon</p>
