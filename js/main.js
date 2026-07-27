@@ -100,17 +100,23 @@
     logoDesktopQuery.addListener(applyLogoMode);
   }
 
-  /* Hero rings (image + statement): desktop shows one at a time. Each ring
-     appears once per cycle (random order), then hides before the next. After
-     all have shown, a new shuffled cycle starts. Timing matches the logo. */
-  const resultRings = Array.prototype.slice.call(
-    document.querySelectorAll(".result-ring")
-  );
+  /* Result rings (image + statement): desktop uses fixed .site-rings on every
+     page (one at a time, shuffled cycles). Mobile uses hero-flow rings (all
+     visible). Timing matches the logo rotation. */
+  let resultRings = [];
   let ringRevealTimer = null;
   let ringCycleOrder = [];
   let ringCycleIndex = 0;
   let activeRing = null;
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  function getRingElements() {
+    /* Desktop: site-wide fixed rings. Mobile: hero-embedded rings. */
+    const selector = logoDesktopQuery.matches
+      ? ".site-rings .result-ring"
+      : ".hero-rings .result-ring";
+    return Array.prototype.slice.call(document.querySelectorAll(selector));
+  }
 
   function shuffleList(list) {
     const arr = list.slice();
@@ -156,6 +162,7 @@
   }
 
   function startDesktopRingReveal() {
+    resultRings = getRingElements();
     if (!resultRings.length) return;
     clearRingRevealTimer();
 
@@ -190,10 +197,19 @@
   }
 
   function applyRingRevealMode() {
+    clearRingRevealTimer();
+    activeRing = null;
+    /* Clear visibility on both sets when switching modes */
+    document.querySelectorAll(".result-ring").forEach(function (el) {
+      el.classList.remove("is-visible");
+    });
+
+    resultRings = getRingElements();
+
     if (logoDesktopQuery.matches) {
       startDesktopRingReveal();
     } else {
-      /* Mobile: always show rings (CSS does not hide them) */
+      /* Mobile: always show hero rings (CSS does not hide them) */
       showAllRings();
     }
   }
